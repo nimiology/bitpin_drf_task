@@ -36,19 +36,18 @@ class ArticleRatingSerializer(ModelSerializer):
 
     class Meta:
         model = ArticleRating
-        fields = ('id', 'owner', 'article', 'rating')
+        fields = ('id', 'owner', 'article', 'rate')
 
-    def to_representation(self, instance):
-        self.fields['article'] = ArticleSerializer()
-        return super(ArticleRatingSerializer, self).to_representation(instance)
-
-    def validate(self, attrs):
-        owner = attrs.get('owner')
-        article = attrs.get('article')
+    def save(self, **kwargs):
+        owner = kwargs.get('owner')
+        article = self.validated_data.get('article')
         try:
             instance = ArticleRating.objects.get(owner=owner, article=article)
             self.instance = instance
         except ArticleRating.DoesNotExist:
             pass
-        return attrs
+        return super(ArticleRatingSerializer, self).save(**kwargs)
 
+    def to_representation(self, instance):
+        self.fields['article'] = ArticleSerializer()
+        return super(ArticleRatingSerializer, self).to_representation(instance)
