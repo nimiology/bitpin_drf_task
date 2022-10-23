@@ -30,14 +30,6 @@ class ArticleSerializer(ModelSerializer):
         except ArticleRating.DoesNotExist:
             return None
 
-    # def get_rate_length(self):
-    #     return len(self.instance.article_ratins.all())
-    #
-    # def get_rete_mean(self):
-    #     ratings = self.instance.article_ratins.all()
-    #     rates_sum = sum(rate.rate for rate in ratings)
-    #     return rates_sum / len(ratings)
-
 
 class ArticleRatingSerializer(ModelSerializer):
     owner = UserSerializer(read_only=True)
@@ -49,3 +41,14 @@ class ArticleRatingSerializer(ModelSerializer):
     def to_representation(self, instance):
         self.fields['article'] = ArticleSerializer()
         return super(ArticleRatingSerializer, self).to_representation(instance)
+
+    def validate(self, attrs):
+        owner = attrs.get('owner')
+        article = attrs.get('article')
+        try:
+            instance = ArticleRating.objects.get(owner=owner, article=article)
+            self.instance = instance
+        except ArticleRating.DoesNotExist:
+            pass
+        return attrs
+

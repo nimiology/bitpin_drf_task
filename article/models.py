@@ -9,7 +9,6 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
-
     def rate_length(self):
         return len(self.article_ratings.all())
 
@@ -17,6 +16,8 @@ class Article(models.Model):
         ratings = self.article_ratings.all()
         rates_sum = sum(int(rate.rate) for rate in ratings)
         return rates_sum / len(ratings)
+
+
 class ArticleRating(models.Model):
     related_name = 'article_ratings'
     RATE_CHOICES = (
