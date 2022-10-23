@@ -21,6 +21,7 @@ class Article(models.Model):
 class ArticleRating(models.Model):
     related_name = 'article_ratings'
     RATE_CHOICES = (
+        ('0', '0'),
         ('1', '1'),
         ('2', '2'),
         ('3', '3'),
