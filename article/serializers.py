@@ -11,6 +11,7 @@ class ArticleSerializer(ModelSerializer):
         model = Article
         fields = ['id', 'title', 'rate_length', 'rete_mean', 'user_rate']
 
+    # get user from request
     def _user(self):
         request = self.context.get('request', None)
         if request:
@@ -20,6 +21,7 @@ class ArticleSerializer(ModelSerializer):
                 return None
         return None
 
+    # get user rate
     def get_user_rate(self, instance):
         user = self._user()
         try:
@@ -39,6 +41,7 @@ class ArticleRatingSerializer(ModelSerializer):
         fields = ('id', 'owner', 'article', 'rate')
 
     def save(self, **kwargs):
+        '''if there is a article rating update, if not create'''
         owner = kwargs.get('owner')
         article = self.validated_data.get('article')
         try:

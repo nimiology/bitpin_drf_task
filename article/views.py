@@ -29,4 +29,5 @@ class ArticleRatingAPIView(CreateAPIView):
         return self.create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
+        # add owner from request user
         return serializer.save(owner=self.request.user)
